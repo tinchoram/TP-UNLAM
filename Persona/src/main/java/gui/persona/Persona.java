@@ -4,8 +4,8 @@ import java.time.LocalDate;
 
 
 public class Persona {
-    public static final char DELIM = '\t';
-    
+    public static final char LIMITER = ',';
+
     private int dni;
     private String nombre;
     private String apellido;
@@ -84,8 +84,17 @@ public class Persona {
      */    
     @Override
     public String toString() {
-        return String.format("%08d%c%20s%c%20s%c%02d/%02d/%04d", this.dni, DELIM, this.getNombre(), DELIM, this.apellido, DELIM,
-                this.fechaNac.getDayOfMonth(), this.fechaNac.getMonthValue(), this.fechaNac.getYear()); 
+        return String.format("%08d%c%s%c%s%c%02d/%02d/%04d",
+                this.dni,
+                LIMITER,
+                this.getNombre().trim(),
+                LIMITER,
+                this.apellido.trim(),
+                LIMITER,
+                this.fechaNac.getDayOfMonth(),
+                this.fechaNac.getMonthValue(),
+                this.fechaNac.getYear()
+        );
     }
     
 }

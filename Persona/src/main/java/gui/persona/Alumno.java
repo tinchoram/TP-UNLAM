@@ -17,6 +17,13 @@ public class Alumno extends Persona {
         super();
     }
 
+    
+    public Alumno(int legajo, String name, String lastName, int dni, LocalDate fecIng, LocalDate fecNac) throws PersonaException {
+        super(dni, name, lastName, fecNac);
+        this.legajo = legajo;
+        this.fechaIng = fecIng;
+    }
+    
     public Alumno(int legajo, short cantMatAprob, double promedio, LocalDate fechaIng,
             List<Carrera> carreras) {
         this.legajo = legajo;
@@ -103,6 +110,6 @@ public class Alumno extends Persona {
 
     @Override
     public String toString() {
-        return super.toString() + Persona.DELIM + estado;
+        return super.toString() + Persona.LIMITER + estado;
     }
 }

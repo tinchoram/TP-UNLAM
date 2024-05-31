@@ -45,7 +45,7 @@ public class DaoTXT extends DAO<Alumno, Integer>{
             String lineaAlu;
             Integer dniAlu;
             while ((lineaAlu = raf.readLine())!=null) {
-                dniAlu = Integer.valueOf(lineaAlu.substring(0, 8));
+                dniAlu = Integer.valueOf(lineaAlu.substring(0, 9));
                 if (dniAlu.equals(dni)) {
                     return AlumnoUtils.str2Alu(lineaAlu);
                 }
@@ -68,7 +68,7 @@ public class DaoTXT extends DAO<Alumno, Integer>{
             String lineaAlu;
             Integer dniAlu;
             while ((lineaAlu = raf.readLine())!=null) {
-                dniAlu = Integer.valueOf(lineaAlu.substring(0, 8));
+                dniAlu = Integer.valueOf(lineaAlu.substring(0, 9));
                 if (dniAlu.equals(alu.getDni())) {
                     raf.seek(filePointer);
                     raf.writeBytes(alu.toString());

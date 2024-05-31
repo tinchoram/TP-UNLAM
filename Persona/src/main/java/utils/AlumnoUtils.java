@@ -11,10 +11,11 @@ public final class AlumnoUtils {
 
     public static Alumno str2Alu(String aluStr) throws PersonaException {
         Alumno alu = new Alumno();
-        String[] lineasStr = aluStr.split(String.valueOf(Persona.DELIM));
+        String[] lineasStr = aluStr.split(String.valueOf(Persona.LIMITER));
         alu.setDni(Integer.valueOf(lineasStr[0]));
         alu.setNombre(lineasStr[1]);
         alu.setApellido(lineasStr[2]);
+        alu.setEstado(lineasStr[4].charAt(0));
 
         String fechaNac = lineasStr[3]; // "05/11/1999"
         String[] fechaNacArr = fechaNac.split("/");
