@@ -1,0 +1,119 @@
+JFDML JFormDesigner: "8.2.3.0.386" Java: "17.0.7" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+			"$horizontalGroup": "par l {seq l {space :::p, par l {seq {comp jScrollPane1:::p:503:p, space ::47:x, par l:::p {comp crearButton:::::x, comp modificarButton::l:::x, comp borrarButton::l:::x, comp jButton4::l::0:x}}, seq {par l {par t:::p {comp fullpathTextField::l:::x, seq {comp jLabel1:::p:176:p, space s:::p, comp selectorRepoComboBox:::p:156:p, space :p:55:p, comp browseButton:::p:56:p}}, comp jCheckBox1:::p:129:p}, space :0:0:x}}, space :::p}}"
+			"$verticalGroup": "par l {seq t {space :::p, par b {comp selectorRepoComboBox::b:p::p, comp jLabel1::b:p::p, comp browseButton::b:p::p}, space u:::p, comp fullpathTextField:::p::p, space ::38:x, comp jCheckBox1:::p::p, space :::p, par l {comp jScrollPane1:::p:255:p, seq {comp crearButton:::p::p, space s:::p, comp modificarButton:::p::p, space s:::p, comp borrarButton:::p::p, space :p:26:p, comp jButton4:::p::p}}, space :p:102:p}}"
+		} ) {
+			name: "this"
+			"defaultCloseOperation": 3
+			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+				name: "jScrollPane1"
+				add( new FormComponent( "javax.swing.JTable" ) {
+					name: "alumnosTable"
+					"model": new com.jformdesigner.model.SwingTableModel( new java.util.Vector {
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+						add( new java.util.Vector {
+							add( null )
+							add( null )
+							add( null )
+							add( null )
+						} )
+					}, new java.util.Vector {
+						add( "Title 1" )
+						add( "Title 2" )
+						add( "Title 3" )
+						add( "Title 4" )
+					}, new java.util.Vector {
+						add( class java.lang.Object )
+						add( class java.lang.Object )
+						add( class java.lang.Object )
+						add( class java.lang.Object )
+					}, new java.util.Vector {
+						add( true )
+						add( true )
+						add( true )
+						add( true )
+					}, new java.util.Vector {
+						add( null )
+						add( null )
+						add( null )
+						add( null )
+					} )
+				} )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "crearButton"
+				"text": "Crear"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "crearButtonActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "modificarButton"
+				"text": "Modificar"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "modificarButtonActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "borrarButton"
+				"text": "Borrar"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "borrarButtonActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "jButton4"
+				"text": "Consultar"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButton4ActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JComboBox" ) {
+				name: "selectorRepoComboBox"
+				"model": new javax.swing.DefaultComboBoxModel {
+					selectedItem: "TXT"
+					addElement( "TXT" )
+					addElement( "SQL" )
+				}
+				auxiliary() {
+					"JavaCodeGenerator.typeParameters": "String"
+				}
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "selectorRepoComboBoxActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "jLabel1"
+				"text": "Seleccione repositorio:"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "browseButton"
+				"text": "..."
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "browseButtonActionPerformed", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "fullpathTextField"
+				"editable": false
+				"background": new java.awt.Color( 204, 204, 204, 255 )
+			} )
+			add( new FormComponent( "javax.swing.JCheckBox" ) {
+				name: "jCheckBox1"
+				"text": "Solo los activos"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 660, 532 )
+		} )
+	}
+}
