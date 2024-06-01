@@ -269,7 +269,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
     private void browseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseButtonActionPerformed
         JFileChooser chooser = new JFileChooser();
-        File dir = new File("C:\\Users\\g.guzman\\Documents\\NetBeansProjects\\2024\\Unificado\\TestDao");
+        File dir = new File("");
         chooser.setCurrentDirectory(dir);
         int resp = chooser.showOpenDialog(jLabel1);
         if (resp!=JFileChooser.APPROVE_OPTION) {
@@ -344,7 +344,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        // TODO ...
+
         Alumno alumno = getAlumnoSeleccionado(rowSlected);
         
         AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
