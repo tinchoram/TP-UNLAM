@@ -11,7 +11,7 @@ public final class AlumnoUtils {
 
     public static Alumno str2Alu(String aluStr) throws PersonaException {
         Alumno alu = new Alumno();
-        String[] lineasStr = aluStr.split(String.valueOf(Persona.LIMITER));
+        String[] lineasStr = aluStr.split(String.valueOf(Persona.DELIMITER));
         alu.setDni(Integer.valueOf(lineasStr[0]));
         alu.setNombre(lineasStr[1]);
         alu.setApellido(lineasStr[2]);

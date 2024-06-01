@@ -110,6 +110,6 @@ public class Alumno extends Persona {
 
     @Override
     public String toString() {
-        return super.toString() + Persona.LIMITER + estado;
+        return super.toString() + Persona.DELIMITER + estado + Persona.DELIMITER + this.getLegajo();
     }
 }

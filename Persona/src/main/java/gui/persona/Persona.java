@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 
 public class Persona {
-    public static final char LIMITER = ',';
+    public static final char DELIMITER = ',';
 
     private int dni;
     private String nombre;
@@ -86,11 +86,11 @@ public class Persona {
     public String toString() {
         return String.format("%08d%c%s%c%s%c%02d/%02d/%04d",
                 this.dni,
-                LIMITER,
+                DELIMITER,
                 this.getNombre().trim(),
-                LIMITER,
+                DELIMITER,
                 this.apellido.trim(),
-                LIMITER,
+                DELIMITER,
                 this.fechaNac.getDayOfMonth(),
                 this.fechaNac.getMonthValue(),
                 this.fechaNac.getYear()

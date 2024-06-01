@@ -43,11 +43,12 @@ public class DaoTXT extends DAO<Alumno, Integer>{
         try {
             raf.seek(0);
             String lineaAlu;
-            Integer dniAlu;
+
             while ((lineaAlu = raf.readLine())!=null) {
-                dniAlu = Integer.valueOf(lineaAlu.substring(0, 9));
-                if (dniAlu.equals(dni)) {
-                    return AlumnoUtils.str2Alu(lineaAlu);
+
+                Alumno alumno = AlumnoUtils.str2Alu(lineaAlu);
+                if (alumno.getDni() == dni) {
+                    return alumno;
                 }
             }
             return null;
@@ -66,10 +67,9 @@ public class DaoTXT extends DAO<Alumno, Integer>{
             long filePointer = 0;
             raf.seek(filePointer);
             String lineaAlu;
-            Integer dniAlu;
             while ((lineaAlu = raf.readLine())!=null) {
-                dniAlu = Integer.valueOf(lineaAlu.substring(0, 9));
-                if (dniAlu.equals(alu.getDni())) {
+                Alumno alumno = AlumnoUtils.str2Alu(lineaAlu);
+                if (alumno.getDni() == alu.getDni()) {
                     raf.seek(filePointer);
                     raf.writeBytes(alu.toString());
                     return;
@@ -79,7 +79,9 @@ public class DaoTXT extends DAO<Alumno, Integer>{
         } catch (IOException ex) {
             Logger.getLogger(DaoTXT.class.getName()).log(Level.SEVERE, null, ex);
             throw new DaoException("Error E/S ==> No se pudo leer el archivo"+ "("+ex.getLocalizedMessage()+")");
-        }        
+        } catch (PersonaException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -101,8 +103,12 @@ public class DaoTXT extends DAO<Alumno, Integer>{
             raf.seek(0);
             String lineaAlu;
             while ((lineaAlu = raf.readLine())!=null) {
-                // TODO solaActivos ??
-                alumnos.add(AlumnoUtils.str2Alu(lineaAlu));
+                Alumno alumno = AlumnoUtils.str2Alu(lineaAlu);
+                if (solaActivos) {
+                    if (alumno.getEstado() =='A') {
+                        alumnos.add(alumno);
+                    }
+                }
             }
         } catch (IOException ex) {
             Logger.getLogger(DaoTXT.class.getName()).log(Level.SEVERE, null, ex);
