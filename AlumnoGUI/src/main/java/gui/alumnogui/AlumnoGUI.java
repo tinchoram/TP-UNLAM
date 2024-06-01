@@ -400,7 +400,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
         System.out.println("Se cerró el modal");
     }//GEN-LAST:event_crearButtonActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
         AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.READ);
         alumnoDialog.setVisible(true);
 
