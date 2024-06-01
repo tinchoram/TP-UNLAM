@@ -1,10 +1,14 @@
 package gui.alumnogui;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.LayoutStyle;
+import javax.swing.event.*;
 import javax.swing.table.*;
+
+import dao.DAO;
 import dao.DAOFactory;
 import dao.DaoException;
 import dao.DaoFactoryException;
@@ -13,6 +17,7 @@ import gui.alumnogui.mappers.AlumnoMapper;
 import gui.persona.Alumno;
 import gui.persona.PersonaException;
 import java.io.File;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,46 +28,58 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import static dao.DAOFactory.*;
+
 public class AlumnoGUI extends javax.swing.JFrame {
     
     private static final int TIPO_TXT = 0;
     private static final int TIPO_SQL = 1;
 
+    AlumnoTableModel alumnoModel = new AlumnoTableModel();
+
     /**
      * Creates new form AlumnoGUI
      */
+    private void buttonLoadDataMouseClicked(MouseEvent e) throws PersonaException, SQLException, DaoFactoryException, DaoException {
+        if (selectorRepoComboBox.getSelectedIndex()==TIPO_TXT) {
+            browseButton.setVisible(true);
+            fullpathTextField.setVisible(true);
+
+            if (fullpathTextField.getText() == null || fullpathTextField.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "El campo de ruta no puede estar vacío. Por favor, ingrese una ruta válida.", "Ruta vacía", JOptionPane.WARNING_MESSAGE);
+            } else {
+                Boolean OnlyActiveUsers = jCheckBoxOnlyActiveUsers.isSelected();
+                reloadTableFromTxt(fullpathTextField.getText(), OnlyActiveUsers);
+            }
+
+        }
+        else {
+            browseButton.setVisible(false);
+            fullpathTextField.setVisible(false);
+
+            // Cargo los datos en la tabla
+            Boolean OnlyActiveUsers = jCheckBoxOnlyActiveUsers.isSelected();
+            reloadTableSql(OnlyActiveUsers);
+
+        }
+    }
+
+    private void jCheckBoxOnlyActiveUsersStateChanged(ChangeEvent e) {
+
+    }
+
     public AlumnoGUI() {
-            initComponents();
-            setTitle("Alumno GUI");
-            setLocationRelativeTo(null);
-            
-            disaleButtons();
-            
-            AlumnoTableModel alumnoModel = new AlumnoTableModel();
-            
+
+        initComponents();
+        setTitle("Alumno GUI");
+        setLocationRelativeTo(null);
+        disaleButtons();
+
         try {
-            // Simulación (TODO quitar)
             List<Alumno> alumnos = new ArrayList<>();
-            Alumno alu1 = new Alumno();
-            Alumno alu2 = new Alumno();
-            
-            alu1.setDni(12345678);
-            alu1.setNombre("NombreUno");
-            alu1.setApellido("ApellidoUno");
-            alu1.setFechaNac(LocalDate.now());
-            
-            alu2.setDni(9999999);
-            alu2.setNombre("NombreDos");
-            alu2.setApellido("ApellidoDos");
-            alu2.setFechaNac(LocalDate.now().plusDays(45));
-            
-            alumnos.add(alu1);
-            alumnos.add(alu2);
-            
             alumnoModel.setAlumnos(alumnos);
-            
             alumnosTable.setModel(alumnoModel);
-        } catch (PersonaException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -86,7 +103,8 @@ public class AlumnoGUI extends javax.swing.JFrame {
         jLabel1 = new JLabel();
         browseButton = new JButton();
         fullpathTextField = new JTextField();
-        jCheckBox1 = new JCheckBox();
+        jCheckBoxOnlyActiveUsers = new JCheckBox();
+        buttonLoadData = new JButton();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -137,7 +155,19 @@ public class AlumnoGUI extends javax.swing.JFrame {
             "TXT",
             "SQL"
         }));
-        selectorRepoComboBox.addActionListener(e -> selectorRepoComboBoxActionPerformed(e));
+        selectorRepoComboBox.addActionListener(e -> {
+            try {
+                selectorRepoComboBoxActionPerformed(e);
+            } catch (PersonaException ex) {
+                throw new RuntimeException(ex);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            } catch (DaoFactoryException ex) {
+                throw new RuntimeException(ex);
+            } catch (DaoException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         //---- jLabel1 ----
         jLabel1.setText("Seleccione repositorio:");
@@ -150,8 +180,28 @@ public class AlumnoGUI extends javax.swing.JFrame {
         fullpathTextField.setEditable(false);
         fullpathTextField.setBackground(new Color(0xcccccc));
 
-        //---- jCheckBox1 ----
-        jCheckBox1.setText("Solo los activos");
+        //---- jCheckBoxOnlyActiveUsers ----
+        jCheckBoxOnlyActiveUsers.setText("Solo los activos");
+        jCheckBoxOnlyActiveUsers.addChangeListener(e -> jCheckBoxOnlyActiveUsersStateChanged(e));
+
+        //---- buttonLoadData ----
+        buttonLoadData.setText("Cargar");
+        buttonLoadData.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    buttonLoadDataMouseClicked(e);
+                } catch (PersonaException ex) {
+                    throw new RuntimeException(ex);
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (DaoFactoryException ex) {
+                    throw new RuntimeException(ex);
+                } catch (DaoException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -170,16 +220,20 @@ public class AlumnoGUI extends javax.swing.JFrame {
                                 .addComponent(jButton4, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)))
                         .addGroup(contentPaneLayout.createSequentialGroup()
                             .addGroup(contentPaneLayout.createParallelGroup()
-                                .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(fullpathTextField, GroupLayout.Alignment.LEADING)
-                                    .addGroup(contentPaneLayout.createSequentialGroup()
-                                        .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(selectorRepoComboBox, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(55, 55, 55)
-                                        .addComponent(browseButton, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(jCheckBox1, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
-                            .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(jCheckBoxOnlyActiveUsers, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+                                .addGroup(contentPaneLayout.createSequentialGroup()
+                                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(fullpathTextField, GroupLayout.Alignment.LEADING)
+                                        .addGroup(contentPaneLayout.createSequentialGroup()
+                                            .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(selectorRepoComboBox, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(buttonLoadData)
+                                            .addGap(65, 65, 65)))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(browseButton, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)))
+                            .addGap(0, 84, Short.MAX_VALUE)))
                     .addContainerGap())
         );
         contentPaneLayout.setVerticalGroup(
@@ -189,11 +243,13 @@ public class AlumnoGUI extends javax.swing.JFrame {
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(selectorRepoComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1)
-                        .addComponent(browseButton))
+                        .addComponent(buttonLoadData))
                     .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(fullpathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                    .addComponent(jCheckBox1)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(fullpathTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(browseButton))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                    .addComponent(jCheckBoxOnlyActiveUsers)
                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(contentPaneLayout.createParallelGroup()
                         .addComponent(jScrollPane1, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
@@ -224,7 +280,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
         modificarButton.setEnabled(true);
     }//GEN-LAST:event_browseButtonActionPerformed
 
-    private void selectorRepoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectorRepoComboBoxActionPerformed
+    private void selectorRepoComboBoxActionPerformed(java.awt.event.ActionEvent evt) throws PersonaException, SQLException, DaoFactoryException, DaoException {
         if (selectorRepoComboBox.getSelectedIndex()==TIPO_TXT) {
             browseButton.setVisible(true);
             fullpathTextField.setVisible(true);
@@ -233,7 +289,54 @@ public class AlumnoGUI extends javax.swing.JFrame {
             browseButton.setVisible(false);
             fullpathTextField.setVisible(false);
         }
-    }//GEN-LAST:event_selectorRepoComboBoxActionPerformed
+    }
+
+    private void reloadTableFromTxt(String pathFile, Boolean onlyActiveUsers) throws DaoFactoryException, PersonaException, SQLException, DaoException {
+
+        try {
+            DAOFactory factory = DAOFactory.getInstance();
+            Map<String, String> configMap = new HashMap<>();
+            configMap.put(TIPO_DAO, TIPO_DAO_TXT);
+            configMap.put(FULL_PATH, pathFile);
+            DAO daoTxt = factory.crearDAO(configMap);
+
+            List<Alumno> alumnos = daoTxt.findAll(onlyActiveUsers);
+            alumnoModel.setAlumnos(alumnos);
+            alumnosTable.setModel(alumnoModel);
+            alumnoModel.fireTableDataChanged();
+        } catch (Exception ex) {
+            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void reloadTableSql(Boolean onlyActiveUsers) {
+
+        try {
+            DAOFactory factory = DAOFactory.getInstance();
+            Map<String, String> configMap = new HashMap<>();
+            configMap.put(TIPO_DAO, TIPO_DAO_SQL);
+            configMap.put(URL_DB, "jdbc:postgresql://localhost:5432/unlam");
+            configMap.put(USER_DB, "postgres");
+            configMap.put(PWD_DB, "postgres");
+
+            DAO daoSql = factory.crearDAO(configMap);
+
+            List<Alumno> alumnos = daoSql.findAll(onlyActiveUsers);
+            alumnoModel.setAlumnos(alumnos);
+            alumnosTable.setModel(alumnoModel);
+            alumnoModel.fireTableDataChanged();
+
+        } catch (PersonaException ex) {
+            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DaoFactoryException e) {
+            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (DaoException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private void modificarButtonActionPerformed(java.awt.event.ActionEvent evt) throws PersonaException {//GEN-FIRST:event_modificarButtonActionPerformed
         int rowSlected = alumnosTable.getSelectedRow();
@@ -350,7 +453,8 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private JLabel jLabel1;
     private JButton browseButton;
     private JTextField fullpathTextField;
-    private JCheckBox jCheckBox1;
+    private JCheckBox jCheckBoxOnlyActiveUsers;
+    private JButton buttonLoadData;
     // End of variables declaration//GEN-END:variables
 
     private void disaleButtons() {

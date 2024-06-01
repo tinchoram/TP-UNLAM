@@ -4,8 +4,8 @@ new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq l {space :::p, par l {seq {comp jScrollPane1:::p:503:p, space ::47:x, par l:::p {comp crearButton:::::x, comp modificarButton::l:::x, comp borrarButton::l:::x, comp jButton4::l::0:x}}, seq {par l {par t:::p {comp fullpathTextField::l:::x, seq {comp jLabel1:::p:176:p, space s:::p, comp selectorRepoComboBox:::p:156:p, space :p:55:p, comp browseButton:::p:56:p}}, comp jCheckBox1:::p:129:p}, space :0:0:x}}, space :::p}}"
-			"$verticalGroup": "par l {seq t {space :::p, par b {comp selectorRepoComboBox::b:p::p, comp jLabel1::b:p::p, comp browseButton::b:p::p}, space u:::p, comp fullpathTextField:::p::p, space ::38:x, comp jCheckBox1:::p::p, space :::p, par l {comp jScrollPane1:::p:255:p, seq {comp crearButton:::p::p, space s:::p, comp modificarButton:::p::p, space s:::p, comp borrarButton:::p::p, space :p:26:p, comp jButton4:::p::p}}, space :p:102:p}}"
+			"$horizontalGroup": "par l {seq l {space :::p, par l {seq {comp jScrollPane1:::p:503:p, space ::47:x, par l:::p {comp crearButton:::::x, comp modificarButton::l:::x, comp borrarButton::l:::x, comp jButton4::l::0:x}}, seq {par l {comp jCheckBoxOnlyActiveUsers:::p:129:p, seq l {par t:::p {comp fullpathTextField::l:::x, seq {comp jLabel1:::p:176:p, space s:::p, comp selectorRepoComboBox:::p:156:p, space :::p, comp buttonLoadData:::p::p, space :p:65:p}}, space :::p, comp browseButton:::p:56:p}}, space :0:84:x}}, space :::p}}"
+			"$verticalGroup": "par l {seq t {space :::p, par b {comp selectorRepoComboBox::b:p::p, comp jLabel1::b:p::p, comp buttonLoadData::b:p::p}, space u:::p, par b {comp fullpathTextField::b:p::p, comp browseButton::b:p::p}, space ::37:x, comp jCheckBoxOnlyActiveUsers:::p::p, space :::p, par l {comp jScrollPane1:::p:255:p, seq {comp crearButton:::p::p, space s:::p, comp modificarButton:::p::p, space s:::p, comp borrarButton:::p::p, space :p:26:p, comp jButton4:::p::p}}, space :p:102:p}}"
 		} ) {
 			name: "this"
 			"defaultCloseOperation": 3
@@ -108,8 +108,14 @@ new FormModel {
 				"background": new java.awt.Color( 204, 204, 204, 255 )
 			} )
 			add( new FormComponent( "javax.swing.JCheckBox" ) {
-				name: "jCheckBox1"
+				name: "jCheckBoxOnlyActiveUsers"
 				"text": "Solo los activos"
+				addEvent( new FormEvent( "javax.swing.event.ChangeListener", "stateChanged", "jCheckBoxOnlyActiveUsersStateChanged", true ) )
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "buttonLoadData"
+				"text": "Cargar"
+				addEvent( new FormEvent( "java.awt.event.MouseListener", "mouseClicked", "buttonLoadDataMouseClicked", true ) )
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

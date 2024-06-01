@@ -100,7 +100,7 @@ public class TestDaoSql {
     }
 
     @Test
-    public void testFindAllAlumnoSql() throws DaoException, PersonaException, SQLException {
+    public void testFindAllAlumnoSqlTrue() throws DaoException, PersonaException, SQLException {
 
         Alumno alu = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
         daoSql.create(alu);
@@ -149,5 +149,6 @@ public class TestDaoSql {
         assertEquals(alumnoList.size(), 4);
 
     }
+
 
 }

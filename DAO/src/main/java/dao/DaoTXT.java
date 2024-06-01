@@ -104,10 +104,8 @@ public class DaoTXT extends DAO<Alumno, Integer>{
             String lineaAlu;
             while ((lineaAlu = raf.readLine())!=null) {
                 Alumno alumno = AlumnoUtils.str2Alu(lineaAlu);
-                if (solaActivos) {
-                    if (alumno.getEstado() =='A') {
-                        alumnos.add(alumno);
-                    }
+                if (!solaActivos || alumno.getEstado() == 'A') {
+                    alumnos.add(alumno);
                 }
             }
         } catch (IOException ex) {

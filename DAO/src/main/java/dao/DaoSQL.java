@@ -55,7 +55,6 @@ public class DaoSQL extends DAO<Alumno, Integer>{
             insertPS.setString(index++, alu.getApellido());
             insertPS.setDate(index++, AlumnoUtils.localDate2SqlDate(alu.getFechaNac()));
             insertPS.setString(index++, String.valueOf(alu.getEstado()));
-
             insertPS.execute();
         } catch (SQLException ex) {
             Logger.getLogger(DaoSQL.class.getName()).log(Level.SEVERE, null, ex);

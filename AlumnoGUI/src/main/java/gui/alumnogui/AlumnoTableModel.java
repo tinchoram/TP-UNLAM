@@ -6,7 +6,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class AlumnoTableModel extends AbstractTableModel {
 
-    private static final String[] COLUMNAS = {"DNI", "NOMBRE", "APELLIDO", "FEC. NAC."};
+    private static final String[] COLUMNAS = {"DNI", "NOMBRE", "APELLIDO", "ESTADO"};
             
     private List<Alumno> alumnos;
 
@@ -38,8 +38,7 @@ public class AlumnoTableModel extends AbstractTableModel {
             case 0: return alumno.getDni();
             case 1: return alumno.getNombre();
             case 2: return alumno.getApellido();
-            case 3: return alumno.getFechaNac(); // TODO con formaro dd/MM/aaaa
-            // TODO: agregar estado del alumno
+            case 3: return alumno.getEstado();
         }
         return null;
     }
