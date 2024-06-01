@@ -118,6 +118,36 @@ public class TestDaoSql {
         assertEquals(alumnoList.size(), 3);
     }
 
+    @Test
+    public void testFindAllAlumnoSqlFalse() throws DaoException, PersonaException, SQLException {
 
+        Alumno alu = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        daoSql.create(alu);
+        legajo++;
+        dni+=1;
+        Alumno alu2 = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        daoSql.create(alu2);
+        legajo++;
+        dni+=1;
+        Alumno alu3 = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        daoSql.create(alu3);
+
+        Alumno aluRead = (Alumno) daoSql.read(dni);
+        System.out.println("Alumno leído ==> "+aluRead.toString());
+        daoSql.delete(dni);
+        Alumno aluReadDeleted = (Alumno) daoSql.read(dni);
+        System.out.println("Alumno leído ==> "+aluReadDeleted.toString());
+        assertEquals("B".charAt(0), aluReadDeleted.getEstado());
+
+        legajo++;
+        dni+=1;
+        Alumno alu4 = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        daoSql.create(alu4);
+
+        List<Alumno> alumnoList = new ArrayList<Alumno>(daoSql.findAll(false));
+        System.out.println("Alumnos leídos ==> "+alumnoList.toString());
+        assertEquals(alumnoList.size(), 4);
+
+    }
 
 }
