@@ -450,8 +450,8 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Error a crear alumno: " + ex , "Database", JOptionPane.WARNING_MESSAGE);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            } catch (DaoException e) {
-                throw new RuntimeException(e);
+            } catch (DaoException ex) {
+                JOptionPane.showMessageDialog(null, "Error a crear alumno: " + ex , "Database", JOptionPane.WARNING_MESSAGE);
             }
 
 
