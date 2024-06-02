@@ -79,7 +79,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "jButton4"
 				"text": "Consultar"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jButton4ActionPerformed", true ) )
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "consultaButtonActionPerformed", true ) )
 			} )
 			add( new FormComponent( "javax.swing.JComboBox" ) {
 				name: "selectorRepoComboBox"

@@ -12,7 +12,8 @@ import java.util.Calendar;
 import javax.swing.JTextField;
 
 public class AlumnoDialog extends javax.swing.JDialog {
-    
+
+    private boolean confirmed;
     public static final String CREATE = "CREATE";
     public static final String UPDATE = "UPDATE";
     public static final String READ = "READ";
@@ -43,6 +44,15 @@ public class AlumnoDialog extends javax.swing.JDialog {
         this.nombreTextField = nombreTextField;
     }
 
+//    private void cancel(ActionEvent e) {
+//        // TODO add your code here
+//    }
+
+    private void cancelButtonMouseClicked(MouseEvent e) {
+        confirmed = false;
+        dispose();
+    }
+
     /**
      * Creates new form AlumnoDialog
      */
@@ -54,6 +64,40 @@ public class AlumnoDialog extends javax.swing.JDialog {
         
         cancelButton.setVisible(!action.equals(READ));
         dniTextField.setEditable(action.equals(CREATE));
+        disableTextFields(action);
+        confirmed = false;
+    }
+
+    private void disableTextFields(String action) {
+
+        switch (action) {
+            case CREATE:
+                dniTextField.setEditable(true);
+                dniTextField.setEnabled(true);
+                nombreTextField.setEditable(true);
+                apellidoTextField.setEditable(true);
+                fecNacDateChooser.setEnabled(true);
+                legajoTextField.setEditable(true);
+                legajoTextField.setEnabled(true);
+                break;
+            case UPDATE:
+                dniTextField.setEditable(false);
+                nombreTextField.setEditable(true);
+                apellidoTextField.setEditable(true);
+                fecNacDateChooser.setEnabled(true);
+                legajoTextField.setEditable(false);
+                break;
+            case READ:
+                dniTextField.setEditable(false);
+                nombreTextField.setEditable(false);
+                apellidoTextField.setEditable(false);
+                fecNacDateChooser.setEnabled(false);
+                legajoTextField.setEditable(false);
+                break;
+            default:
+                dniTextField.setEditable(false);
+                nombreTextField.setEditable(false);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -70,8 +114,8 @@ public class AlumnoDialog extends javax.swing.JDialog {
         jLabel3 = new JLabel();
         label1 = new JLabel();
         label2 = new JLabel();
-        textField1 = new JTextField();
-        textField2 = new JTextField();
+        legajoTextField = new JTextField();
+        apellidoTextField = new JTextField();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -89,9 +133,19 @@ public class AlumnoDialog extends javax.swing.JDialog {
 
         //---- cancelButton ----
         cancelButton.setText("Cancelar");
+        cancelButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cancelButtonMouseClicked(e);
+            }
+        });
 
         //---- jLabel1 ----
         jLabel1.setText("DNI:");
+
+        //---- dniTextField ----
+        dniTextField.setEnabled(false);
+        dniTextField.setEditable(false);
 
         //---- jLabel2 ----
         jLabel2.setText("Nombre:");
@@ -104,6 +158,10 @@ public class AlumnoDialog extends javax.swing.JDialog {
 
         //---- label2 ----
         label2.setText("Apellido");
+
+        //---- legajoTextField ----
+        legajoTextField.setEditable(false);
+        legajoTextField.setEnabled(false);
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -131,8 +189,8 @@ public class AlumnoDialog extends javax.swing.JDialog {
                                     .addComponent(fecNacDateChooser, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
                                     .addComponent(dniTextField)
                                     .addComponent(nombreTextField)
-                                    .addComponent(textField1, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
-                                .addComponent(textField2, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(legajoTextField, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                                .addComponent(apellidoTextField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))))
                     .addContainerGap())
         );
         contentPaneLayout.setVerticalGroup(
@@ -149,7 +207,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(legajoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
@@ -160,7 +218,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
                             .addComponent(label2)
                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
-                            .addComponent(textField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(apellidoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)))
                     .addGroup(contentPaneLayout.createParallelGroup()
                         .addComponent(fecNacDateChooser, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -175,10 +233,11 @@ public class AlumnoDialog extends javax.swing.JDialog {
         setLocationRelativeTo(getOwner());
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {
         dniTextField.setText(String.valueOf(dto.getDni()));
+        legajoTextField.setText(String.valueOf(dto.getLegajo()));
         nombreTextField.setText(dto.getNombre());
-        
+        apellidoTextField.setText(dto.getApellido());
         int year = dto.getFecNac().getYear();
         int month = dto.getFecNac().getMonthValue();
         int day = dto.getFecNac().getDayOfMonth();
@@ -186,18 +245,23 @@ public class AlumnoDialog extends javax.swing.JDialog {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month-1, day);
         fecNacDateChooser.setCalendar(cal);
-    }//GEN-LAST:event_formWindowOpened
+    }
 
-    private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OKButtonActionPerformed
-        // TODO validar??
+    public boolean isConfirmed() {
+        return confirmed;
+    }
+    private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {
+
         dto.setDni(Integer.valueOf(dniTextField.getText()));
+        dto.setLegajo(Integer.valueOf(legajoTextField.getText()));
         dto.setNombre(nombreTextField.getText());
+        dto.setApellido(apellidoTextField.getText());
         
         Calendar calendar = fecNacDateChooser.getCalendar();
         LocalDate localDate = LocalDateTime.ofInstant(calendar.toInstant(), 
                 calendar.getTimeZone().toZoneId()).toLocalDate();
         dto.setFecNac(localDate);
-        
+        confirmed = true;
         setVisible(false);
     }
 
@@ -255,7 +319,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
     private JLabel jLabel3;
     private JLabel label1;
     private JLabel label2;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JTextField legajoTextField;
+    private JTextField apellidoTextField;
     // End of variables declaration//GEN-END:variables
 }

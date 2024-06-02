@@ -48,8 +48,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             if (fullpathTextField.getText() == null || fullpathTextField.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "El campo de ruta no puede estar vacío. Por favor, ingrese una ruta válida.", "Ruta vacía", JOptionPane.WARNING_MESSAGE);
             } else {
-                Boolean OnlyActiveUsers = jCheckBoxOnlyActiveUsers.isSelected();
-                reloadTableFromTxt(fullpathTextField.getText(), OnlyActiveUsers);
+                reloadTable();
             }
 
         }
@@ -57,9 +56,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             browseButton.setVisible(false);
             fullpathTextField.setVisible(false);
 
-            // Cargo los datos en la tabla
-            Boolean OnlyActiveUsers = jCheckBoxOnlyActiveUsers.isSelected();
-            reloadTableSql(OnlyActiveUsers);
+            reloadTable();
 
         }
     }
@@ -130,7 +127,13 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
         //---- crearButton ----
         crearButton.setText("Crear");
-        crearButton.addActionListener(e -> crearButtonActionPerformed(e));
+        crearButton.addActionListener(e -> {
+            try {
+                crearButtonActionPerformed(e);
+            } catch (PersonaException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         //---- modificarButton ----
         modificarButton.setText("Modificar");
@@ -148,7 +151,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
         //---- jButton4 ----
         jButton4.setText("Consultar");
-        jButton4.addActionListener(e -> jButton4ActionPerformed(e));
+        jButton4.addActionListener(e -> consultaButtonActionPerformed(e));
 
         //---- selectorRepoComboBox ----
         selectorRepoComboBox.setModel(new DefaultComboBoxModel<>(new String[] {
@@ -338,7 +341,16 @@ public class AlumnoGUI extends javax.swing.JFrame {
         }
     }
 
-    private void modificarButtonActionPerformed(java.awt.event.ActionEvent evt) throws PersonaException {//GEN-FIRST:event_modificarButtonActionPerformed
+    private void reloadTable() throws PersonaException, SQLException, DaoFactoryException, DaoException {
+        if (selectorRepoComboBox.getSelectedIndex()==TIPO_TXT) {
+            reloadTableFromTxt(fullpathTextField.getText(), jCheckBoxOnlyActiveUsers.isSelected());
+        }
+        else {
+            reloadTableSql(jCheckBoxOnlyActiveUsers.isSelected());
+        }
+    }
+
+    private void modificarButtonActionPerformed(java.awt.event.ActionEvent evt) throws PersonaException {
         int rowSlected = alumnosTable.getSelectedRow();
         if (rowSlected<0) {
             JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
@@ -349,24 +361,32 @@ public class AlumnoGUI extends javax.swing.JFrame {
         
         AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.UPDATE);
         alumnoDialog.setDto(AlumnoMapper.alumno2Dto(alumno));
-        alumnoDialog.setVisible(true); // se suspende la ejecución
-        
-        Map<String, String> configMap = new HashMap<>();
-        configMap.put(DAOFactory.TIPO_DAO, DAOFactory.TIPO_DAO_TXT);
-        String fullpath = fullpathTextField.getText();
-        configMap.put(DAOFactory.FULL_PATH, fullpath);
+        alumnoDialog.setVisible(true);
+
+        if (!alumnoDialog.isConfirmed()) {
+            // El usuario canceló la operación, no hacer nada
+            return;
+        }
+
         try {
             // Recupero los datos cargador en el diálogo
-            dao.DAO dao = DAOFactory.getInstance().crearDAO(configMap);
+            dao.DAO dao = DAOFactory.getInstance().crearDAO(buildConfigMap());
+            dao.update(AlumnoMapper.dto2Alumno(alumnoDialog.getDto()));
+            reloadTable();
         } catch (DaoFactoryException ex) {
             Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (DaoException e) {
+            throw new RuntimeException(e);
         }
-        
-        //dao.update(AlumnoMapper.dto2Alumno(alumnoDialog.getDto()));
+
+
         alumno = AlumnoMapper.dto2Alumno(alumnoDialog.getDto());
         System.out.println("alumno a persistir ==> "+alumno.getDni() + "- "+alumno.getNombre()+ "- "+alumno.getFechaNac());
+
                 
-    }//GEN-LAST:event_modificarButtonActionPerformed
+    }
 
     private void borrarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarButtonActionPerformed
         int rowSlected = alumnosTable.getSelectedRow();
@@ -377,14 +397,27 @@ public class AlumnoGUI extends javax.swing.JFrame {
             Alumno alumno = getAlumnoSeleccionado(rowSlected);
             
             int resp = JOptionPane.showConfirmDialog(this, "¿Está seguro de borrar el alumno "
-                    + "("+alumno.getDni()+" - " +alumno.getNombre()+")?", "Confirmación de borrado", JOptionPane.OK_CANCEL_OPTION);
+                    + "("+alumno.getDni()+" - "+alumno.getApellido()+" "+alumno.getNombre()+")?", "Confirmación de borrado", JOptionPane.OK_CANCEL_OPTION);
             if (resp!=JOptionPane.OK_OPTION) {
                 return;
             }
             System.out.println("Se borra el alumno");
-            // Borrar
+
+            try {
+                dao.DAO dao = DAOFactory.getInstance().crearDAO(buildConfigMap());
+                dao.delete(alumno.getDni());
+                reloadTable();
+            } catch (PersonaException e) {
+                throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (DaoFactoryException e) {
+                throw new RuntimeException(e);
+            } catch (DaoException e) {
+                throw new RuntimeException(e);
+            }
         }
-    }//GEN-LAST:event_borrarButtonActionPerformed
+    }
 
     private Alumno getAlumnoSeleccionado(int rowSlected) {
         AlumnoTableModel alumnoTableModel = (AlumnoTableModel) alumnosTable.getModel();
@@ -393,18 +426,58 @@ public class AlumnoGUI extends javax.swing.JFrame {
         return alumno;
     }
 
-    private void crearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearButtonActionPerformed
-        AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.CREATE);
-        alumnoDialog.setVisible(true);
-        
-        System.out.println("Se cerró el modal");
-    }//GEN-LAST:event_crearButtonActionPerformed
+    private void crearButtonActionPerformed(java.awt.event.ActionEvent evt) throws PersonaException {
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        if ((selectorRepoComboBox.getSelectedIndex()==TIPO_TXT)&&(fullpathTextField.getText() == null || fullpathTextField.getText().trim().isEmpty())) {
+            JOptionPane.showMessageDialog(null, "El campo de ruta no puede estar vacío. Por favor, ingrese una ruta válida.", "Ruta vacía", JOptionPane.WARNING_MESSAGE);
+        } else {
+            AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.CREATE);
+            Alumno alumno = new Alumno(0, "","",0, LocalDate.now(), LocalDate.now() );
+            alumnoDialog.setDto(AlumnoMapper.alumno2Dto(alumno));
+            alumnoDialog.setVisible(true);
+
+            if (!alumnoDialog.isConfirmed()) {
+                // El usuario canceló la operación, no hacer nada
+                return;
+            }
+
+            try {
+                dao.DAO dao = DAOFactory.getInstance().crearDAO(buildConfigMap());
+                dao.create(AlumnoMapper.dto2Alumno(alumnoDialog.getDto()));
+                reloadTable();
+            } catch (DaoFactoryException ex) {
+                Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Error a crear alumno: " + ex , "Database", JOptionPane.WARNING_MESSAGE);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (DaoException e) {
+                throw new RuntimeException(e);
+            }
+
+
+            alumno = AlumnoMapper.dto2Alumno(alumnoDialog.getDto());
+            System.out.println("alumno a persistir ==> "+alumno.getDni() + "- "+alumno.getNombre()+ "- "+alumno.getFechaNac());
+        }
+
+
+
+    }
+
+    private void consultaButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        int rowSlected = alumnosTable.getSelectedRow();
+        if (rowSlected<0) {
+            JOptionPane.showMessageDialog(this, "No se ha seleccionado un alumno", "Error", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        Alumno alumno = getAlumnoSeleccionado(rowSlected);
+
         AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.READ);
+        alumnoDialog.setDto(AlumnoMapper.alumno2Dto(alumno));
+
         alumnoDialog.setVisible(true);
 
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }
 
     /**
      * @param args the command line arguments
@@ -460,5 +533,23 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private void disaleButtons() {
         crearButton.setEnabled(true);
         modificarButton.setEnabled(true);
+    }
+
+
+    private Map<String, String> buildConfigMap(){
+        if (selectorRepoComboBox.getSelectedIndex()==TIPO_TXT) {
+            Map<String, String> configMap = new HashMap<>();
+            configMap.put(DAOFactory.TIPO_DAO, DAOFactory.TIPO_DAO_TXT);
+            String fullpath = fullpathTextField.getText();
+            configMap.put(DAOFactory.FULL_PATH, fullpath);
+            return configMap;
+        } else {
+            Map<String, String> configMap = new HashMap<>();
+            configMap.put(TIPO_DAO, TIPO_DAO_SQL);
+            configMap.put(URL_DB, "jdbc:postgresql://localhost:5432/unlam");
+            configMap.put(USER_DB, "postgres");
+            configMap.put(PWD_DB, "postgres");
+            return configMap;
+        }
     }
 }
