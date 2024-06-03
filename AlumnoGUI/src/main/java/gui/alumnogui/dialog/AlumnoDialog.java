@@ -252,6 +252,10 @@ public class AlumnoDialog extends javax.swing.JDialog {
     }
     private void OKButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
+        if (!validarCampos()) {
+            return;
+        }
+        
         dto.setDni(Integer.valueOf(dniTextField.getText()));
         dto.setLegajo(Integer.valueOf(legajoTextField.getText()));
         dto.setNombre(nombreTextField.getText());
@@ -263,6 +267,63 @@ public class AlumnoDialog extends javax.swing.JDialog {
         dto.setFecNac(localDate);
         confirmed = true;
         setVisible(false);
+    }
+
+    private boolean validarCampos() {
+        if (dniTextField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo DNI no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            Integer.parseInt(dniTextField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El campo DNI debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (dniTextField.getText().length() != 8) {
+            JOptionPane.showMessageDialog(this, "El campo DNI debe tener exactamente 8 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (legajoTextField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo Legajo no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        try {
+            Integer.parseInt(legajoTextField.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El campo Legajo debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (legajoTextField.getText().length() != 4) {
+            JOptionPane.showMessageDialog(this, "El campo Legajo debe tener exactamente 4 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (nombreTextField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo Nombre no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (!nombreTextField.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            JOptionPane.showMessageDialog(this, "El campo Nombre solo puede contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (apellidoTextField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo Apellido no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!apellidoTextField.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+            JOptionPane.showMessageDialog(this, "El campo Apellido solo puede contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (fecNacDateChooser.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "El campo Fecha de Nacimiento no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
     }
 
     /**
