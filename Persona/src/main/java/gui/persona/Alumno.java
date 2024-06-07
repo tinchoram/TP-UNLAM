@@ -6,7 +6,7 @@ import java.util.List;
 public class Alumno extends Persona {
 
     private int legajo;
-    private short cantMatAprob;
+    private Integer cantMatAprob;
     private double promedio;
     private LocalDate fechaIng;
     private char estado = 'A';
@@ -27,7 +27,7 @@ public class Alumno extends Persona {
     public Alumno(int legajo, short cantMatAprob, double promedio, LocalDate fechaIng,
             List<Carrera> carreras) {
         this.legajo = legajo;
-        this.cantMatAprob = cantMatAprob;
+        this.cantMatAprob = (int) cantMatAprob;
         this.promedio = promedio;
         this.fechaIng = fechaIng;
         this.carreras = carreras;
@@ -37,7 +37,7 @@ public class Alumno extends Persona {
             List<Carrera> carreras, int dni) {
         super(dni);
         this.legajo = legajo;
-        this.cantMatAprob = cantMatAprob;
+        this.cantMatAprob = (int) cantMatAprob;
         this.promedio = promedio;
         this.fechaIng = fechaIng;
         this.carreras = carreras;
@@ -47,10 +47,17 @@ public class Alumno extends Persona {
             List<Carrera> carreras, int dni, String nombre, String apellido, LocalDate fechaNac) throws PersonaException {
         super(dni, nombre, apellido, fechaNac);
         this.legajo = legajo;
-        this.cantMatAprob = cantMatAprob;
+        this.cantMatAprob = (int) cantMatAprob;
         this.promedio = promedio;
         setFechaIng(fechaIng);
         this.carreras = carreras;
+    }
+
+    public Alumno(int legajo, String name, String lastname, char genero, int dni, LocalDate fecIng, LocalDate fecNac, String email, String telefono, String direccion, String localidad, int cantMatAprobadas) {
+        super(dni, name, lastname, genero, fecNac, email, telefono, direccion, localidad);
+        this.legajo = legajo;
+        this.fechaIng = fecIng;
+        this.cantMatAprob = (Integer) cantMatAprobadas;
     }
 
     public char getEstado() {
@@ -69,11 +76,11 @@ public class Alumno extends Persona {
         this.legajo = legajo;
     }
 
-    public short getCantMatAprob() {
+    public Integer getCantMatAprob() {
         return cantMatAprob;
     }
 
-    public void setCantMatAprob(short cantMatAprob) {
+    public void setCantMatAprob(Integer cantMatAprob) {
         this.cantMatAprob = cantMatAprob;
     }
 
@@ -90,12 +97,12 @@ public class Alumno extends Persona {
         return fechaIng;
     }
 
-    public void setFechaIng(LocalDate fechaIng) throws PersonaException {
+    public void setFechaIng(LocalDate fechaIng) {
         if (fechaIng == null) {
-            throw new PersonaException("La fecha de ingreso no puede ser nula");
+            throw new IllegalArgumentException("La fecha de ingreso no puede ser nula");
         }
-        if (fechaIng.isBefore(fechaNac)) {
-            throw new PersonaException("La fecha de ingreso debe ser mayor a la fecha de nacimiento");
+        if (this.fechaNac != null && fechaIng.isBefore(this.fechaNac)) {
+            throw new IllegalArgumentException("La fecha de ingreso debe ser mayor a la fecha de nacimiento");
         }
         this.fechaIng = fechaIng;
     }
@@ -110,6 +117,23 @@ public class Alumno extends Persona {
 
     @Override
     public String toString() {
-        return super.toString() + Persona.DELIMITER + estado + Persona.DELIMITER + this.getLegajo();
+        return String.format("%d%c%d%c%.2f%c%c%c%s",
+                this.legajo,
+                Persona.DELIMITER,
+                this.cantMatAprob,
+                Persona.DELIMITER,
+                this.promedio,
+                Persona.DELIMITER,
+                this.estado,
+                Persona.DELIMITER,
+                super.toString());
+    }
+
+    public int getCantMatAprobadas() {
+        return this.cantMatAprob;
+    }
+
+    public void setCantMatAprobadas(short cantMatAprobadas) {
+        this.cantMatAprob = (int) cantMatAprobadas;
     }
 }

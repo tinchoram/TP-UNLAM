@@ -19,16 +19,24 @@ import java.util.Map;
 
 import static dao.DAOFactory.*;
 import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNull;
 
 public class TestDaoTxt {
 
     DAO daoTxt;
-    int legajo = 1;
+    int legajo = 9999;
     int dni = 123456789;
     String name = "Homer";
     String lastname = "Simpson";
-    short cantMatAprb = 2;
-    LocalDate fecNac = LocalDate.of(1972, 3, 20);
+
+    char genero = 'M';
+
+    String email = "email@email.com";
+    String telefono = "12345678";
+    String localidad = "La Matanza";
+    String direccion = "Calle Falsa 123";
+    short cantMatAprobadas = 2;
+    LocalDate fecNac = LocalDate.of(2000, 3, 20);
     LocalDate fecIng = LocalDate.of(2024, 3, 1);
     private static final String TEST_FILE_PATH = "alumnos_base_test.txt";
 //    public static void main(String[] args) throws DaoException {
@@ -61,16 +69,32 @@ public class TestDaoTxt {
     @Test
     public void testCreateAlumnoTxt() throws DaoException, PersonaException, DaoFactoryException {
 
-        Alumno alu = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        Alumno alu = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
         daoTxt.create(alu);
         Alumno aluRead = (Alumno) daoTxt.read(dni);
         System.out.println("Alumno leído ==> "+aluRead.toString());
         assertEquals(alu.getDni(), aluRead.getDni());
     }
+    @Test
+    public void testCreateTwoAlumnosTxt() throws DaoException, PersonaException, DaoFactoryException {
+
+        Alumno alu = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
+        daoTxt.create(alu);
+        Alumno aluRead = (Alumno) daoTxt.read(dni);
+        System.out.println("Alumno leído ==> "+aluRead.toString());
+
+
+        Alumno alu2 = new Alumno(legajo, name, lastname, genero, 11222333, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
+        daoTxt.create(alu2);
+        Alumno aluRead2 = (Alumno) daoTxt.read(11222333);
+        System.out.println("Alumno leído ==> "+aluRead2.toString());
+
+        assertEquals(alu.getDni(), aluRead.getDni());
+    }
 
     @Test
     public void testEditAlumnoTxt() throws DaoException, PersonaException, SQLException {
-        Alumno alu = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        Alumno alu = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
         daoTxt.create(alu);
 
         String nameEdited = "HomerEdited";
@@ -85,7 +109,7 @@ public class TestDaoTxt {
 
     @Test
     public void testDeleteAlumnoTxt() throws DaoException, PersonaException, SQLException {
-        Alumno alu = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        Alumno alu = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
         daoTxt.create(alu);
 
         Alumno aluRead = (Alumno) daoTxt.read(dni);
@@ -100,16 +124,19 @@ public class TestDaoTxt {
 
     @Test
     public void testReadAllAlumnoTxt() throws DaoException, PersonaException, SQLException {
-        Alumno alumno1 = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        Alumno alumno1 = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
         daoTxt.create(alumno1);
         legajo++;
-        Alumno alumno2 = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        dni++;
+        Alumno alumno2 = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
         daoTxt.create(alumno2);
         legajo++;
-        Alumno alumno3 = new Alumno(legajo, name, lastname, 11222333, fecIng, fecNac);
+        dni++;
+        Alumno alumno3 = new Alumno(legajo, name, lastname, genero, 11222333, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
         daoTxt.create(alumno3);
         legajo++;
-        Alumno alumno4 = new Alumno(legajo, name, lastname, dni, fecIng, fecNac);
+        dni++;
+        Alumno alumno4 = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email,  telefono,  direccion,  localidad, cantMatAprobadas);
         daoTxt.create(alumno4);
 
         Alumno aluRead = (Alumno) daoTxt.read(11222333);
@@ -122,6 +149,79 @@ public class TestDaoTxt {
         assertEquals(alumnoList.size(), 3);
     }
 
+    @Test(expected = DaoException.class)
+    public void testCreateDuplicateAlumno() throws DaoException, PersonaException {
+        Alumno alu = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email, telefono, direccion, localidad, cantMatAprobadas);
+        daoTxt.create(alu);
 
+        // Intentar crear el mismo alumno nuevamente
+        daoTxt.create(alu);
+    }
 
+    @Test(expected = DaoException.class)
+    public void testReadNonExistentAlumno() throws DaoException {
+        Alumno aluRead = (Alumno) daoTxt.read(99999999); // Usar un DNI que no exista
+    }
+
+    @Test(expected = DaoException.class)
+    public void testUpdateNonExistentAlumno() throws DaoException, PersonaException, SQLException {
+        Alumno alu = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email, telefono, direccion, localidad, cantMatAprobadas);
+        daoTxt.update(alu); // Intentar actualizar un alumno que no existe
+    }
+
+    @Test(expected = DaoException.class)
+    public void testDeleteNonExistentAlumno() throws DaoException, SQLException {
+        daoTxt.delete(99999999); // Usar un DNI que no exista
+    }
+
+    @Test
+    public void testMultipleOperationsConsistency() throws DaoException, PersonaException, SQLException {
+        Alumno alu1 = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email, telefono, direccion, localidad, cantMatAprobadas);
+        daoTxt.create(alu1);
+
+        legajo++;
+        dni++;
+        Alumno alu2 = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email, telefono, direccion, localidad, cantMatAprobadas);
+        daoTxt.create(alu2);
+
+        // Leer ambos alumnos
+        Alumno aluRead1 = (Alumno) daoTxt.read(alu1.getDni());
+        Alumno aluRead2 = (Alumno) daoTxt.read(alu2.getDni());
+        assertEquals(alu1.getDni(), aluRead1.getDni());
+        assertEquals(alu2.getDni(), aluRead2.getDni());
+
+        // Actualizar uno de los alumnos
+        aluRead1.setNombre("HomerUpdated");
+        daoTxt.update(aluRead1);
+
+        // Leer el alumno actualizado
+        Alumno aluRead1Updated = (Alumno) daoTxt.read(alu1.getDni());
+        assertEquals("HomerUpdated", aluRead1Updated.getNombre());
+
+        // Eliminar el otro alumno
+        daoTxt.delete(alu2.getDni());
+
+        // Verificar que el alumno eliminado no existe
+        Alumno aluReadDeleted = (Alumno) daoTxt.read(alu2.getDni());
+        assertEquals("B".charAt(0), aluReadDeleted.getEstado());
+    }
+
+    @Test
+    public void testUpdateAlumnoTxt() throws DaoException, PersonaException, SQLException {
+        Alumno alu = new Alumno(legajo, name, lastname, genero, dni, fecIng, fecNac, email, telefono, direccion, localidad, cantMatAprobadas);
+        daoTxt.create(alu);
+
+        String nameEdited = "HomerEdited";
+        Alumno aluRead = (Alumno) daoTxt.read(dni);
+        aluRead.setNombre(nameEdited);
+        daoTxt.update(aluRead);
+        Alumno aluReadEdited = (Alumno) daoTxt.read(dni);
+        System.out.println("Alumno leído ==> " + aluReadEdited.toString());
+        assertEquals(aluReadEdited.getNombre(), nameEdited);
+
+        // Verificar que solo la línea actualizada se ha cambiado
+        List<Alumno> alumnoList = new ArrayList<>(daoTxt.findAll(true));
+        assertEquals(1, alumnoList.size());
+        assertEquals(nameEdited, alumnoList.get(0).getNombre());
+    }
 }

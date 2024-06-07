@@ -11,29 +11,47 @@ public final class AlumnoUtils {
 
     public static Alumno str2Alu(String aluStr) throws PersonaException {
         Alumno alu = new Alumno();
-        String[] lineasStr = aluStr.split(String.valueOf(Persona.DELIMITER));
-        alu.setDni(Integer.valueOf(lineasStr[0]));
-        alu.setNombre(lineasStr[1]);
-        alu.setApellido(lineasStr[2]);
-        alu.setEstado(lineasStr[4].charAt(0));
-        alu.setLegajo(Integer.valueOf(lineasStr[5]));
 
-        String fechaNac = lineasStr[3]; // "05/11/1999"
-        String[] fechaNacArr = fechaNac.split("/");
-        int year = Integer.valueOf(fechaNacArr[2]);
-        int month = Integer.valueOf(fechaNacArr[1]);
-        int dayOfMonth = Integer.valueOf(fechaNacArr[0]);
+        if (aluStr.endsWith(String.valueOf(Persona.END_OF_FILE))) {
+            aluStr = aluStr.substring(0, aluStr.length() - 1);
+        }
+
+        String[] lineasStr = aluStr.split(String.valueOf(Persona.DELIMITER));
+
+        alu.setLegajo(Integer.valueOf(lineasStr[0]));
+        alu.setCantMatAprob(Integer.valueOf(lineasStr[1]));
+        alu.setPromedio(Double.valueOf(lineasStr[2]));
+        alu.setEstado(lineasStr[3].charAt(0));
+        alu.setDni(Integer.valueOf(lineasStr[4]));
+        alu.setNombre(lineasStr[5]);
+        alu.setApellido(lineasStr[6]);
+        alu.setGenero(lineasStr[7].charAt(0));
+        String fechaNac = lineasStr[8];
+        int year = Integer.valueOf(fechaNac.substring(0, 4));
+        int month = Integer.valueOf(fechaNac.substring(4, 6));
+        int dayOfMonth = Integer.valueOf(fechaNac.substring(6, 8));
         alu.setFechaNac(LocalDate.of(year, month, dayOfMonth));
+        alu.setEmail(lineasStr[9]);
+        alu.setTelefono(lineasStr[10]);
+        alu.setDireccion(lineasStr[11]);
+        alu.setLocalidad(lineasStr[12]);
+
+
         
         return alu;
     }
-    
+
     public static Date localDate2SqlDate(LocalDate localDate) {
-        
+        if (localDate == null) {
+            return null;
+        }
         return Date.valueOf(localDate);
     }
 
     public static LocalDate sqlDate2LocalDate(Date sqlDate) {
+        if (sqlDate == null) {
+            return null;
+        }
         return sqlDate.toLocalDate();
     }
 }

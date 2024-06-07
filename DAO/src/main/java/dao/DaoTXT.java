@@ -51,7 +51,7 @@ public class DaoTXT extends DAO<Alumno, Integer>{
                     return alumno;
                 }
             }
-            return null;
+            throw new DaoException("Alumno no encontrado ==> "+dni);
         } catch (IOException ex) {
             Logger.getLogger(DaoTXT.class.getName()).log(Level.SEVERE, null, ex);
             throw new DaoException("Error E/S ==> No se pudo leer el archivo"+ "("+ex.getLocalizedMessage()+")");
@@ -64,21 +64,37 @@ public class DaoTXT extends DAO<Alumno, Integer>{
     @Override
     public void update(Alumno alu) throws DaoException {
         try {
-            long filePointer = 0;
-            raf.seek(filePointer);
-            String lineaAlu;
-            while ((lineaAlu = raf.readLine())!=null) {
-                Alumno alumno = AlumnoUtils.str2Alu(lineaAlu);
+            // Leer todas las líneas del archivo en memoria
+            List<String> lines = new ArrayList<>();
+            raf.seek(0);
+            String line;
+            while ((line = raf.readLine()) != null) {
+                lines.add(line);
+            }
+
+            // Buscar y actualizar la línea correspondiente
+            boolean found = false;
+            for (int i = 0; i < lines.size(); i++) {
+                Alumno alumno = AlumnoUtils.str2Alu(lines.get(i));
                 if (alumno.getDni() == alu.getDni()) {
-                    raf.seek(filePointer);
-                    raf.writeBytes(alu.toString());
-                    return;
+                    lines.set(i, alu.toString());
+                    found = true;
+                    break;
                 }
-                filePointer = raf.getFilePointer();
+            }
+
+            if (!found) {
+                throw new DaoException("Alumno no encontrado ==> " + alu.getDni());
+            }
+
+            // Reescribir el archivo completo con las modificaciones
+            raf.setLength(0); // Limpiar el archivo
+            for (String updatedLine : lines) {
+                raf.writeBytes(updatedLine + System.lineSeparator());
             }
         } catch (IOException ex) {
             Logger.getLogger(DaoTXT.class.getName()).log(Level.SEVERE, null, ex);
-            throw new DaoException("Error E/S ==> No se pudo leer el archivo"+ "("+ex.getLocalizedMessage()+")");
+            throw new DaoException("Error E/S ==> No se pudo leer el archivo" + " (" + ex.getLocalizedMessage() + ")");
         } catch (PersonaException e) {
             throw new RuntimeException(e);
         }
@@ -86,9 +102,14 @@ public class DaoTXT extends DAO<Alumno, Integer>{
 
     @Override
     public void delete(Integer dni) throws DaoException {
-        Alumno alu = read(dni);
-        alu.setEstado('B');
-        update(alu);
+        try {
+            Alumno alu = read(dni);
+            alu.setEstado('B');
+            update(alu);
+        } catch (DaoException e) {
+            throw new DaoException("Alumno no encontrado ==> "+dni);
+        }
+
     }
 
     @Override
@@ -136,7 +157,7 @@ public class DaoTXT extends DAO<Alumno, Integer>{
             String lineaAlu;
             Integer dniAlu;
             while ((lineaAlu = raf.readLine())!=null) {
-                dniAlu = Integer.valueOf(lineaAlu.substring(0, 8));
+                dniAlu = AlumnoUtils.str2Alu(lineaAlu).getDni();
                 if (dniAlu.equals(dni)) {
                     return true;
                 }
@@ -145,6 +166,8 @@ public class DaoTXT extends DAO<Alumno, Integer>{
         } catch (IOException ex) {
             Logger.getLogger(DaoTXT.class.getName()).log(Level.SEVERE, null, ex);
             throw new DaoException("Error E/S ==> No se pudo leer el archivo"+ "("+ex.getLocalizedMessage()+")");
+        } catch (PersonaException e) {
+            throw new RuntimeException(e);
         }
     }
 }
