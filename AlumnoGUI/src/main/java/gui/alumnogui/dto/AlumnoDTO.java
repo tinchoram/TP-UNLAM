@@ -11,6 +11,12 @@ public class AlumnoDTO {
     private String apellido;
     private LocalDate fecNac;
     private char estado;
+    private String correo;
+    private String telefono;
+    private String direccion;
+    private String localidad;
+    private char genero;
+    private Integer cantidadAprobadas;
 
     public LocalDate getFecNac() {
         return fecNac;
@@ -59,5 +65,53 @@ public class AlumnoDTO {
 
     public char getEstado() {
         return estado;
+    }
+
+    public void setCorreo(String text) {
+        this.correo = text;
+    }
+
+    public void setTelefono(String text) {
+        this.telefono = text;
+    }
+
+    public void setDireccion(String text) {
+        this.direccion = text;
+    }
+
+    public void setLocalidad(String text) {
+        this.localidad = text;
+    }
+
+    public void setGenero(char c) {
+        this.genero = c;
+    }
+
+    public void setCantidadAprobadas(int value) {
+        this.cantidadAprobadas = value;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public char getGenero() {
+        return genero;
+    }
+
+    public int getCantidadAprobadas() {
+        return cantidadAprobadas;
     }
 }

@@ -432,7 +432,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "El campo de ruta no puede estar vacío. Por favor, ingrese una ruta válida.", "Ruta vacía", JOptionPane.WARNING_MESSAGE);
         } else {
             AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, AlumnoDialog.CREATE);
-            Alumno alumno = new Alumno(0, "","",0, LocalDate.now(), LocalDate.now() );
+            Alumno alumno = new Alumno();
             alumnoDialog.setDto(AlumnoMapper.alumno2Dto(alumno));
             alumnoDialog.setVisible(true);
 

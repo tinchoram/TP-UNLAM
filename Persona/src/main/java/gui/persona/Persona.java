@@ -170,4 +170,12 @@ public class Persona {
     public String getLocalidad() {
         return this.localidad;
     }
+
+    public String getCorreo(String correo) {
+        return this.email;
+    }
+
+    public void setCorreo(String correo) {
+        this.email = correo;
+    }
 }

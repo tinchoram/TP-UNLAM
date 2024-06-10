@@ -24,14 +24,14 @@ public class DaoSQL extends DAO<Alumno, Integer>{
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("Conectado OK a la BBDD");
 
-            String insertSql = "INSERT INTO alumnos (DNI, NOMBRE, APELLIDO, GENERO, FEC_ING, FEC_NAC, EMAIL, TELEFONO, DIRECCION, LOCALIDAD, CANT_MAT_APROBADAS, ESTADO) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String insertSql = "INSERT INTO alumnos (LEGAJO, DNI, NOMBRE, APELLIDO, GENERO, FEC_NAC, EMAIL, TELEFONO, DIRECCION, LOCALIDAD, CANT_MAT_APROBADAS, ESTADO) " +
+                    "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
             insertPS = connection.prepareStatement(insertSql);
 
             String readSql = "SELECT * FROM alumnos WHERE DNI = ?;";
             readPS = connection.prepareStatement(readSql);
 
-            String updateSql = "UPDATE alumnos SET NOMBRE = ?, APELLIDO = ?, GENERO = ?, FEC_ING = ?, FEC_NAC = ?, EMAIL = ?, TELEFONO = ?, DIRECCION = ?, LOCALIDAD = ?, CANT_MAT_APROBADAS = ?, ESTADO = ? WHERE DNI = ?;";
+            String updateSql = "UPDATE alumnos SET NOMBRE = ?, APELLIDO = ?, GENERO = ?, FEC_NAC = ?, EMAIL = ?, TELEFONO = ?, DIRECCION = ?, LOCALIDAD = ?, CANT_MAT_APROBADAS = ?, ESTADO = ? WHERE DNI = ?;";
             updatePS = connection.prepareStatement(updateSql);
 
             String deleteSql = "UPDATE alumnos SET ESTADO = 'B' WHERE DNI = ?;";
@@ -50,11 +50,12 @@ public class DaoSQL extends DAO<Alumno, Integer>{
     public void create(Alumno alu) throws DaoException {
         try {
             int index = 1;
+            insertPS.setInt(index++, alu.getLegajo());
             insertPS.setInt(index++, alu.getDni());
             insertPS.setString(index++, alu.getNombre());
             insertPS.setString(index++, alu.getApellido());
             insertPS.setString(index++, String.valueOf(alu.getGenero()));
-            insertPS.setDate(index++, AlumnoUtils.localDate2SqlDate(alu.getFechaIng()));
+            //insertPS.setDate(index++, AlumnoUtils.localDate2SqlDate(alu.getFechaIng()));
             insertPS.setDate(index++, AlumnoUtils.localDate2SqlDate(alu.getFechaNac()));
             insertPS.setString(index++, alu.getEmail());
             insertPS.setString(index++, alu.getTelefono());
@@ -64,6 +65,7 @@ public class DaoSQL extends DAO<Alumno, Integer>{
             insertPS.setString(index++, String.valueOf(alu.getEstado()));
             insertPS.executeUpdate();
         } catch (SQLException ex) {
+            Logger.getLogger(DaoSQL.class.getName()).log(Level.SEVERE, null, ex);
             throw new DaoException("Error SQL ==> No se pudo insertar el alumno");
         }
     }
@@ -111,15 +113,15 @@ public class DaoSQL extends DAO<Alumno, Integer>{
             }
 
             // Validar fechas
-            if (alu.getFechaIng().isBefore(alu.getFechaNac())) {
-                throw new DaoException("La fecha de ingreso debe ser mayor a la fecha de nacimiento");
-            }
+//            if (alu.getFechaIng().isBefore(alu.getFechaNac())) {
+//                throw new DaoException("La fecha de ingreso debe ser mayor a la fecha de nacimiento");
+//            }
 
             int index = 1;
             updatePS.setString(index++, alu.getNombre());
             updatePS.setString(index++, alu.getApellido());
             updatePS.setString(index++, String.valueOf(alu.getGenero()));
-            updatePS.setDate(index++, AlumnoUtils.localDate2SqlDate(alu.getFechaIng()));
+            //updatePS.setDate(index++, AlumnoUtils.localDate2SqlDate(alu.getFechaIng()));
             updatePS.setDate(index++, AlumnoUtils.localDate2SqlDate(alu.getFechaNac()));
             updatePS.setString(index++, alu.getEmail());
             updatePS.setString(index++, alu.getTelefono());

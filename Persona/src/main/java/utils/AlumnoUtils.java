@@ -33,8 +33,9 @@ public final class AlumnoUtils {
         alu.setFechaNac(LocalDate.of(year, month, dayOfMonth));
         alu.setEmail(lineasStr[9]);
         alu.setTelefono(lineasStr[10]);
-        alu.setDireccion(lineasStr[11]);
-        alu.setLocalidad(lineasStr[12]);
+        // Manejar posibles valores nulos o vacíos
+        alu.setDireccion(lineasStr.length > 11 ? lineasStr[11] : "");
+        alu.setLocalidad(lineasStr.length > 12 ? lineasStr[12] : "");
 
 
         

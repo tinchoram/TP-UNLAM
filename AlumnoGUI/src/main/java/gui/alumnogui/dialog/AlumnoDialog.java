@@ -44,9 +44,6 @@ public class AlumnoDialog extends javax.swing.JDialog {
         this.nombreTextField = nombreTextField;
     }
 
-//    private void cancel(ActionEvent e) {
-//        // TODO add your code here
-//    }
 
     private void cancelButtonMouseClicked(MouseEvent e) {
         confirmed = false;
@@ -79,6 +76,10 @@ public class AlumnoDialog extends javax.swing.JDialog {
                 fecNacDateChooser.setEnabled(true);
                 legajoTextField.setEditable(true);
                 legajoTextField.setEnabled(true);
+                correoTextField.setEditable(true);
+                telefonoTextField.setEditable(true);
+                direccionTextField.setEditable(true);
+                localidadTextField.setEditable(true);
                 break;
             case UPDATE:
                 dniTextField.setEditable(false);
@@ -89,10 +90,27 @@ public class AlumnoDialog extends javax.swing.JDialog {
                 break;
             case READ:
                 dniTextField.setEditable(false);
+                dniTextField.setEnabled(false);
                 nombreTextField.setEditable(false);
+                nombreTextField.setEnabled(false);
+                apellidoTextField.setEnabled(false);
                 apellidoTextField.setEditable(false);
+                apellidoTextField.setEnabled(false);
                 fecNacDateChooser.setEnabled(false);
                 legajoTextField.setEditable(false);
+                legajoTextField.setEnabled(false);
+                correoTextField.setEditable(false);
+                correoTextField.setEnabled(false);
+                telefonoTextField.setEditable(false);
+                telefonoTextField.setEnabled(false);
+                direccionTextField.setEditable(false);
+                direccionTextField.setEnabled(false);
+                localidadTextField.setEditable(false);
+                localidadTextField.setEnabled(false);
+                generocomboBox.setEnabled(false);
+                generocomboBox.setEnabled(false);
+                cantidadAprobadaSpinner.setEnabled(false);
+                cantidadAprobadaSpinner.setEnabled(false);
                 break;
             default:
                 dniTextField.setEditable(false);
@@ -116,6 +134,18 @@ public class AlumnoDialog extends javax.swing.JDialog {
         label2 = new JLabel();
         legajoTextField = new JTextField();
         apellidoTextField = new JTextField();
+        correoTextField = new JTextField();
+        label3 = new JLabel();
+        label4 = new JLabel();
+        telefonoTextField = new JTextField();
+        label5 = new JLabel();
+        direccionTextField = new JTextField();
+        label6 = new JLabel();
+        localidadTextField = new JTextField();
+        label7 = new JLabel();
+        generocomboBox = new JComboBox<>();
+        label8 = new JLabel();
+        cantidadAprobadaSpinner = new JSpinner();
 
         //======== this ========
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -163,67 +193,124 @@ public class AlumnoDialog extends javax.swing.JDialog {
         legajoTextField.setEditable(false);
         legajoTextField.setEnabled(false);
 
+        //---- label3 ----
+        label3.setText("Correo");
+
+        //---- label4 ----
+        label4.setText("Telefono");
+
+        //---- label5 ----
+        label5.setText("Direccion");
+
+        //---- label6 ----
+        label6.setText("Localidad");
+
+        //---- label7 ----
+        label7.setText("Genero");
+
+        //---- generocomboBox ----
+        generocomboBox.setModel(new DefaultComboBoxModel<>(new String[] {
+            "X",
+            "F",
+            "M"
+        }));
+
+        //---- label8 ----
+        label8.setText("Cantidad de Materias Aprobadas");
+
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addContainerGap()
+                    .addGap(6, 6, 6)
                     .addGroup(contentPaneLayout.createParallelGroup()
-                        .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addComponent(label2)
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 402, Short.MAX_VALUE)
                             .addComponent(OKButton, GroupLayout.PREFERRED_SIZE, 73, GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
                             .addComponent(cancelButton, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE))
-                        .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                        .addGroup(contentPaneLayout.createSequentialGroup()
                             .addGroup(contentPaneLayout.createParallelGroup()
-                                .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel2, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(label1)
-                                .addComponent(label2))
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
-                            .addGroup(contentPaneLayout.createParallelGroup()
-                                .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(fecNacDateChooser, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                                    .addComponent(dniTextField)
-                                    .addComponent(nombreTextField)
-                                    .addComponent(legajoTextField, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
-                                .addComponent(apellidoTextField, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(label3)
+                                .addComponent(label4)
+                                .addComponent(label5)
+                                .addComponent(label6))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(direccionTextField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                .addComponent(dniTextField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                .addComponent(telefonoTextField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                .addComponent(localidadTextField, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                .addComponent(correoTextField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                                .addComponent(apellidoTextField, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
+                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED, 53, Short.MAX_VALUE)
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                                    .addGroup(contentPaneLayout.createParallelGroup()
+                                        .addComponent(label7)
+                                        .addComponent(jLabel2, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(label1)
+                                        .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(contentPaneLayout.createParallelGroup()
+                                        .addComponent(fecNacDateChooser, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(nombreTextField, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(generocomboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(legajoTextField, GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
+                                    .addComponent(label8)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cantidadAprobadaSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                            .addGap(15, 15, 15)))
                     .addContainerGap())
         );
         contentPaneLayout.setVerticalGroup(
             contentPaneLayout.createParallelGroup()
                 .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addGap(18, 18, 18)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                         .addComponent(jLabel1)
-                        .addComponent(dniTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addGroup(contentPaneLayout.createParallelGroup()
-                        .addGroup(contentPaneLayout.createSequentialGroup()
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                            .addComponent(dniTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                             .addComponent(label1)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(legajoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)))
+                            .addComponent(legajoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(nombreTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(label2)
+                        .addComponent(apellidoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(nombreTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2))
+                    .addGap(18, 18, 18)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(label3)
+                        .addComponent(correoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(label7)
+                        .addComponent(generocomboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addGroup(contentPaneLayout.createParallelGroup()
                         .addGroup(contentPaneLayout.createSequentialGroup()
-                            .addComponent(label2)
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(GroupLayout.Alignment.TRAILING, contentPaneLayout.createSequentialGroup()
-                            .addComponent(apellidoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)))
-                    .addGroup(contentPaneLayout.createParallelGroup()
-                        .addComponent(fecNacDateChooser, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel3, GroupLayout.Alignment.TRAILING))
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
+                            .addGap(6, 6, 6)
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(fecNacDateChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel3, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                            .addGap(18, 18, 18)
+                            .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(telefonoTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(label4))))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(label5)
+                        .addComponent(direccionTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cantidadAprobadaSpinner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(label8))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(label6)
+                        .addComponent(localidadTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                     .addGroup(contentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(OKButton)
                         .addComponent(cancelButton))
@@ -245,6 +332,15 @@ public class AlumnoDialog extends javax.swing.JDialog {
         Calendar cal = Calendar.getInstance();
         cal.set(year, month-1, day);
         fecNacDateChooser.setCalendar(cal);
+
+        correoTextField.setText(dto.getCorreo());
+        telefonoTextField.setText(dto.getTelefono());
+        direccionTextField.setText(dto.getDireccion());
+        localidadTextField.setText(dto.getLocalidad());
+        cantidadAprobadaSpinner.setValue(dto.getCantidadAprobadas());
+        generocomboBox.setSelectedItem(String.valueOf(dto.getGenero()));
+
+
     }
 
     public boolean isConfirmed() {
@@ -260,6 +356,12 @@ public class AlumnoDialog extends javax.swing.JDialog {
         dto.setLegajo(Integer.valueOf(legajoTextField.getText()));
         dto.setNombre(nombreTextField.getText());
         dto.setApellido(apellidoTextField.getText());
+        dto.setCorreo(correoTextField.getText());
+        dto.setTelefono(telefonoTextField.getText());
+        dto.setDireccion(direccionTextField.getText());
+        dto.setLocalidad(localidadTextField.getText());
+        dto.setGenero(generocomboBox.getSelectedItem().toString().charAt(0));
+        dto.setCantidadAprobadas((Integer) cantidadAprobadaSpinner.getValue());
         
         Calendar calendar = fecNacDateChooser.getCalendar();
         LocalDate localDate = LocalDateTime.ofInstant(calendar.toInstant(), 
@@ -270,6 +372,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
     }
 
     private boolean validarCampos() {
+        // Validación DNI
         if (dniTextField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo DNI no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -285,6 +388,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
             return false;
         }
 
+        // Validación Legajo
         if (legajoTextField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo Legajo no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -300,16 +404,21 @@ public class AlumnoDialog extends javax.swing.JDialog {
             return false;
         }
 
+        // Validación Nombre
         if (nombreTextField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo Nombre no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-
         if (!nombreTextField.getText().matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
             JOptionPane.showMessageDialog(this, "El campo Nombre solo puede contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+        if (nombreTextField.getText().length() > 50) {
+            JOptionPane.showMessageDialog(this, "El campo Nombre no puede tener más de 50 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
+        // Validación Apellido
         if (apellidoTextField.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo Apellido no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -318,11 +427,57 @@ public class AlumnoDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "El campo Apellido solo puede contener letras.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+        if (apellidoTextField.getText().length() > 50) {
+            JOptionPane.showMessageDialog(this, "El campo Apellido no puede tener más de 50 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
 
+        // Validación Fecha de Nacimiento
         if (fecNacDateChooser.getDate() == null) {
             JOptionPane.showMessageDialog(this, "El campo Fecha de Nacimiento no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
+
+        // Validación Correo
+        if (correoTextField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo Correo no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!correoTextField.getText().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            JOptionPane.showMessageDialog(this, "El campo Correo debe ser un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (correoTextField.getText().length() > 50) {
+            JOptionPane.showMessageDialog(this, "El campo Correo no puede tener más de 50 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Validación Teléfono
+        if (telefonoTextField.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo Teléfono no puede estar vacío.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (!telefonoTextField.getText().matches("[0-9]+")) {
+            JOptionPane.showMessageDialog(this, "El campo Teléfono debe contener solo números.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        if (telefonoTextField.getText().length() > 20) {
+            JOptionPane.showMessageDialog(this, "El campo Teléfono no puede tener más de 20 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Validación Dirección
+        if (direccionTextField.getText().length() > 50) {
+            JOptionPane.showMessageDialog(this, "El campo Dirección no puede tener más de 50 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Validación Localidad
+        if (localidadTextField.getText().length() > 50) {
+            JOptionPane.showMessageDialog(this, "El campo Localidad no puede tener más de 50 caracteres.", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
         return true;
     }
 
@@ -382,5 +537,17 @@ public class AlumnoDialog extends javax.swing.JDialog {
     private JLabel label2;
     private JTextField legajoTextField;
     private JTextField apellidoTextField;
+    private JTextField correoTextField;
+    private JLabel label3;
+    private JLabel label4;
+    private JTextField telefonoTextField;
+    private JLabel label5;
+    private JTextField direccionTextField;
+    private JLabel label6;
+    private JTextField localidadTextField;
+    private JLabel label7;
+    private JComboBox<String> generocomboBox;
+    private JLabel label8;
+    private JSpinner cantidadAprobadaSpinner;
     // End of variables declaration//GEN-END:variables
 }

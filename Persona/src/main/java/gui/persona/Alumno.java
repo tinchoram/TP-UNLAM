@@ -6,7 +6,7 @@ import java.util.List;
 public class Alumno extends Persona {
 
     private int legajo;
-    private Integer cantMatAprob;
+    private Integer cantMatAprob=0;
     private double promedio;
     private LocalDate fechaIng;
     private char estado = 'A';
