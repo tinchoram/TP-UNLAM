@@ -1,3 +1,4 @@
 1244,3,0.00,A,22333455,Juan,Lopez,X,20240601,mail@mail.com,1123233434,cale 213,Monte Grande;
-3434,5,0.00,B,55666777,Lopez,Mara,F,20000601,mail@mail.com,1190908080,cale 333,Lanus;
-1234,2,0.00,A,99777444,Ivan,Rodriguez,M,20000101,ivan@mail.com,1199887876,,;
+3434,6,0.00,B,55666777,Lopez,Mara,F,20000601,mail@mail.com,1190908080,cale 333,Lanus este;
+1234,2,0.00,B,99777444,Ivan,Rodriguez,M,20000101,ivan@mail.com,1199887876,,;
+9876,3,0.00,A,32666777,Roberto,Ramirez,M,20000101,martin@mail.com,1154332222,,;
